@@ -1,0 +1,168 @@
+<div id="section-id-{{ section.id }}" class="step-guide__spaced-row">
+    <div class="small-container">
+        <div class="step-heading_container align-{{ section.settings.text_alignment }}">
+            <h2 class="main-title">{{ section.settings.title }}</h2>
+            <div>{{ section.settings.title_body }}</div>
+        </div>
+        <div class="main-step_container">
+            <div class="step-selectors_container">
+              {% for block in section.blocks %}
+                <div class="step_selector {% if forloop.index0 == 0 %}active-step{% endif %}">
+                    <p>STEP<br><span>{{ forloop.index }}</span></p>
+                </div>
+              {% endfor %}
+            </div>
+            <div class="step-content_container">
+                <div class="step_slider">
+                {% for block in section.blocks %}
+                    <div class="step_content step{{ forloop.index }}">
+                        <span class="step-label">Step {{ forloop.index }}</span>
+                        <h5>{{ block.settings.step_title }}</h5>
+                        <div class="step-info_container">
+                            <div class="step-info">{{ block.settings.body_text }}</div>
+                            <div class="step-img">
+                              {% if block.settings.image %}
+                              {{ block.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy' }}
+                              {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var $stepSelectors = document.querySelectorAll('.step_selector');
+    $stepSlider = document.querySelector('.step_slider');
+    step1 = $stepSelectors[0];
+    step2 = $stepSelectors[1];
+    step3 = $stepSelectors[2];
+
+    function changeStep(e) {
+        console.log($stepSelectors);
+        var $activeStep = document.querySelector('.step_selector.active-step');
+        if (e.target != $activeStep) {
+            $activeStep.classList.remove('active-step');
+            e.target.classList.add('active-step');
+        }
+        if (e.target == step1) {
+            $stepSlider.style.transform = 'translateX(0%)';
+
+        } else if (e.target == step2) {
+            $stepSlider.style.transform = 'translateX(-100%)';
+        } else if (e.target == step3) {
+            $stepSlider.style.transform = 'translateX(-200%)';
+        }
+    }
+
+    [...$stepSelectors].forEach(function(step) {
+        step.addEventListener('click', changeStep);
+    })
+</script>
+
+{% schema %}
+  {
+  "name": "3 Step Guide",
+	"class": "section-three-step-guide",
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Section heading"
+    },
+    {
+      "type": "richtext",
+      "id": "title_body",
+      "label": "Below title",
+      "default": "<p>Pair text with an image to give customers insight into your brand. Tell a story, explain a product detail, or describe a new promotion.<\/p>"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 20,
+      "max": 150,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop heading text size",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "title_size_mobile",
+      "min": 20,
+      "max": 150,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile heading text size",
+      "default": 32
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "step_title",
+          "label": "Step heading",
+          "default": "Step heading"
+        },
+        {
+          "type": "richtext",
+          "id": "body_text",
+          "label": "Step details",
+          "default": "<p>Pair text with an image to give customers insight into your brand. Tell a story, explain a product detail, or describe a new promotion.<\/p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "3 Step Guide",
+      "settings": {},
+      "blocks": [
+        {
+          "type": "step"
+        },
+        {
+          "type": "step"
+        },
+        {
+          "type": "step"
+        }
+      ]
+    }
+  ]
+  }
+{% endschema %}

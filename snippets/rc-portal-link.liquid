@@ -1,0 +1,58 @@
+<portal-link></portal-link>
+
+<script>
+  class PortalLink extends HTMLElement {
+    constructor() {
+      super();
+      this.attachShadow({ mode: 'open' });
+      this.renderLink();
+    }
+
+    async login() {
+      this.session = await recharge.auth.loginShopifyAppProxy();
+    }
+
+    async fetchPortalAccess() {
+      this.portalAccess = await recharge.customer.getCustomerPortalAccess(this.session);
+    }
+
+    async renderLink() {
+      await this.login();
+      await this.fetchPortalAccess();
+
+      this.shadowRoot.innerHTML = `
+        <style>
+          a.button {
+              display: inline-block;
+              height: auto;
+              padding: var(--input-btn-padding-top) 25px var(--input-btn-padding-bottom);
+              border-radius: var(--btn-border-radius);
+              background: rgb(var(--btn-bg-color));
+              color: rgb(var(--btn-text-color));
+              font-family: var(--base-font-family);
+              font-size: var(--button-text-size);
+              font-style: var(--base-font-style);
+              font-weight: var(--base-font-weight);
+              letter-spacing: var(--btn-letter-spacing);
+              line-height: 1em;
+              text-align: center;
+              text-decoration: none !important;
+              text-transform: var(--btn-text-transform);
+              vertical-align: middle;
+              cursor: pointer;
+              -webkit-tap-highlight-color: transparent;
+              transition: background-color .1s,color .1s,border-color .1s,opacity .1s;
+          }
+
+          a.button:hover {
+            background: rgb(var(--btn-bg-hover-color));
+            border-color: rgb(var(--btn-border-hover-color));
+          }
+        </style>
+        <a class="button" href="${this.portalAccess.portal_url}">Manage Subscriptions</a>
+      `;
+    }
+  }
+
+  customElements.define('portal-link', PortalLink);
+</script>

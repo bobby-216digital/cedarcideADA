@@ -1,0 +1,56 @@
+<h2>Test</h2>
+<test-element>
+  <table class="test-container">
+    <thead>
+      <tr>
+        <td>ID</td>
+        <td>TYPE</td>
+        <td>PRICE</td>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</test-element>
+
+<script>
+  class SubscriptionWidget extends HTMLElement {
+    constructor() {
+      super();
+      this.getData();
+    }
+    async login() {
+      this.session = await recharge.auth.loginShopifyAppProxy();
+    }
+    
+    async getData() {
+      await this.login();
+      const res = await recharge.cdn.getCDNProductAndSettings({{ product.id }})
+      const div = this.querySelector(".test-container tbody");
+      console.log(res);
+      res.product.variants.forEach((variant) => {
+        div.append(this.test(variant));
+      });
+      
+    }
+
+    test(variant) {
+      const row = document.createElement('tr');
+      const id = document.createElement('td');
+      const type = document.createElement('td');
+      const price = document.createElement('td');
+
+      id.innerHTML = variant.id;
+      type.innerHTML = variant.option_values[1] 
+        ? `${variant.option_values[0].label}/${variant.option_values[1].label}` 
+        : variant.option_values[0].label;
+      price.innerHTML = variant.prices.unit_price;
+
+      row.append(id);
+      row.append(type);
+      row.append(price);
+      return row;
+    }
+
+  }
+  customElements.define('test-element', SubscriptionWidget);
+</script>
