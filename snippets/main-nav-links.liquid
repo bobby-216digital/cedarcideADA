@@ -139,7 +139,7 @@
                 {% else %}
                   {% for child_link in link.links %}
                     <li class="navigation__item{% if child_link.links != blank %} navigation__item--with-children{% endif %}{% if use_columns %} navigation__column{% endif %}{% if featured_links contains child_link.title %} featured-link{% endif %}">
-                      <a href="{{ child_link.url }}" class="navigation__link{% if child_link.links != blank %} navigation__column-title{% endif %}" {% if child_link.links != blank %}aria-haspopup="true" aria-expanded="false"{% endif %}>
+                      <a href="{{ child_link.url }}" class="navigation__link{% if child_link.links != blank %} navigation__column-title{% endif %}">
                         {{- child_link.title | escape -}}
                       </a>
                       {% if child_link.links != blank %}

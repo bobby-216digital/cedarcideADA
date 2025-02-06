@@ -58,7 +58,7 @@
   <div class="height--adapt height--adapt-to-overlay-mobile image-overlay image-overlay--bg-{{ section.settings.overlay_style }}" data-cc-animate>
     <div class="image-overlay__image height__image">
       <deferred-media>
-        <button type="button" class="js-load-media hidden" aria-hidden="true"></button>
+        <button aria-label="Media Load" type="button" class="js-load-media hidden" aria-hidden="true"></button>
         <template>
           <video-component class="{% if using_video_tag %}has-video{% else %}has-iframe{% endif %}"
             {%- unless using_video_tag %} data-video-url="{{ section.settings.video_external | escape }}"{% endunless %}

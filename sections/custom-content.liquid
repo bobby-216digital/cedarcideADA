@@ -165,7 +165,7 @@
             <div class="height--adapt image-overlay image-overlay--bg-no_background" data-cc-animate {% if placeholder_image %}style="--aspect-ratio: {{ placeholder_image.aspect_ratio }}"{% endif %}>
               <div class="image-overlay__image height__image">
                 <deferred-media>
-                  <button type="button" class="js-load-media hidden" aria-hidden="true"></button>
+                  <button aria-label="Media Load" type="button" class="js-load-media hidden" aria-hidden="true"></button>
                   <template>
                     <video-component class="{% if using_video_tag %}has-video{% else %}has-iframe{% endif %}"
                       {%- unless using_video_tag %} data-video-url="{{ block.settings.video_external | escape }}"{% endunless %}

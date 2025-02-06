@@ -62,7 +62,7 @@
 
               {% when 'button' %}
                 <div class="lightly-spaced-row button-row" {{ block.shopify_attributes }}>
-                  <a class="{% if block.settings.button_style != 'link' %}btn btn--{{ block.settings.button_style }}{% else %}small-feature-link{% endif %} button-row__btn" href="{{ block.settings.button_link }}">{{ block.settings.button_label | escape }}</a>
+                  <a class="{% if block.settings.button_style != 'link' %}btn btn--{{ block.settings.button_style }}{% else %}small-feature-link{% endif %} button-row__btn" href="{{ block.settings.button_link }}">{{ block.settings.button_label | escape }} <span class="visually-hidden"> About our Blogs</span></a>
                   {%- assign skip_block_count = 0 -%}
                   {%- for next_block in section.blocks offset: forloop.index -%}
                     {%- if next_block.type == 'button' -%}
