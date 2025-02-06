@@ -194,7 +194,7 @@
     {%- if settings.animations_enabled_desktop %} cc-animate-enabled{% endif -%}
     ">
 
-  <a class="skip-link visually-hidden" href="#content">{{ 'accessibility.skip_to_content' | t }}</a>
+  <a class="skip-link" href="#content">{{ 'accessibility.skip_to_content' | t }}</a>
 
   {%- sections 'header-group' -%}
 
@@ -234,5 +234,123 @@
       </added-notification>
     </template>
   {%- endif -%}
+
+
+<script>
+// Full Screen Navigation Display for Accessibility
+const leftNavAll = document.querySelectorAll(".navigation--left .navigation__item--with-children a[aria-expanded]");
+
+leftNavAll.forEach((e, i) => {
+    let selector;
+
+    if (e.parentElement.classList.contains('navigation__item--with-mega-menu')) {
+        selector = ".navigation--main .navigation__item--with-mega-menu";
+    } else {
+        selector = ".navigation--main .navigation__item--with-small-menu";
+    }
+
+    e.addEventListener('focus', () => {
+        const cont = document.querySelector("#" + e.getAttribute('aria-controls')).parentElement;
+        const links = cont.querySelectorAll(".navigation__tier-2-container a");
+        const first = links[0];
+        const last = links[links.length - 1];
+
+        // Show the children and set aria-expanded="true"
+        cont.classList.add("navigation__item--show-children");
+        e.setAttribute('aria-expanded', 'true');
+
+        e.addEventListener('keydown', (ev) => {
+            if (ev.key == "Tab") {
+                if (ev.shiftKey) {
+                    cont.classList.remove("navigation__item--show-children");
+                    e.setAttribute('aria-expanded', 'false');  // Set aria-expanded="false" when collapsing
+                } else {
+                    ev.preventDefault();
+                    cont.querySelector(".navigation__tier-2 a").focus()
+                }
+            }
+        });
+
+        first.addEventListener("keydown", (ev) => {
+            if (ev.key == "Tab" && ev.shiftKey) {
+                ev.preventDefault();
+                cont.classList.remove("navigation__item--show-children");
+                e.setAttribute('aria-expanded', 'false');  // Set aria-expanded="false" when collapsing
+                e.focus();
+            }
+        });
+
+        last.addEventListener("keydown", (ev) => {
+            if (ev.key == "Tab" && !ev.shiftKey) {
+                ev.preventDefault();
+                cont.classList.remove("navigation__item--show-children");
+                e.setAttribute('aria-expanded', 'false');  // Set aria-expanded="false" when collapsing
+                if (i === (leftNavAll.length - 1)) {
+                    document.querySelector("a.logo__link").focus();
+                } else {
+                    leftNavAll[i + 1].focus();
+                }
+            }
+        });
+    });
+});
+
+// Expanded and Collapsed Feature for Filter Options on Collection Pages
+document.addEventListener('DOMContentLoaded', () => {
+    const dropdowns = document.querySelectorAll('.filter-group__heading');
+
+    dropdowns.forEach(dropdown => {
+        // Set the role to 'combobox' for accessibility
+        dropdown.setAttribute('role', 'combobox');
+        dropdown.setAttribute('aria-haspopup', 'true');
+        dropdown.setAttribute('aria-expanded', 'false');
+
+        dropdown.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                const isExpanded = dropdown.getAttribute('aria-expanded') === 'true';
+                const newState = !isExpanded;
+
+                // Update the aria-expanded attribute
+                dropdown.setAttribute('aria-expanded', newState);
+
+                // Create an announcement message
+                const announcement = newState ? 'Dropdown expanded' : 'Dropdown collapsed';
+                announce(announcement);
+            }
+        });
+    });
+
+    function announce(message) {
+        const liveRegion = document.createElement('div');
+        liveRegion.setAttribute('role', 'alert');
+        liveRegion.setAttribute('aria-live', 'assertive');
+        liveRegion.style.position = 'absolute';
+        liveRegion.style.width = '1px';
+        liveRegion.style.height = '1px';
+        liveRegion.style.padding = '0';
+        liveRegion.style.overflow = 'hidden';
+        liveRegion.style.clip = 'rect(0, 0, 0, 0)';
+        liveRegion.style.border = '0';
+
+        liveRegion.textContent = message;
+
+        document.body.appendChild(liveRegion);
+
+        // Remove the live region after a short delay
+        setTimeout(() => {
+            document.body.removeChild(liveRegion);
+        }, 1000);
+    }
+});
+  
+  setTimeout(() => {
+    let klavImg = document.querySelectorAll(".kl-private-reset-css-Xuajs1 img")
+      if (klavImg) {
+        for (let i = 0; i < klavImg.length; i ++) {
+          klavImg[i].setAttribute("alt","What bugs are you dealing with?")
+        }
+      }
+  }, 1250)
+</script>
 </body>
 </html>

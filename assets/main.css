@@ -10937,3 +10937,30 @@ textarea {
     flex-direction: row-reverse;
   }
 }
+
+.main-step_container a {
+  text-decoration: underline !important;
+}
+
+.ql-font-poppins {
+  font-weight: unset !important;
+}
+
+input[type=text], input[type=number], input[type=email], input[type=password], input[type=address], input[type=tel], textarea {
+      border: 1px #000000 solid !important;
+}
+
+.skip-link {
+                position: absolute;
+                left: -10000px;
+                top: 0px;
+                padding: 12px;
+                background-color: white;
+                color: black;
+                border: 2px solid black;
+                border-radius: 5px;
+                z-index: 999999999;
+            }
+            .skip-link:focus-visible {
+                left: 0px;
+            }
